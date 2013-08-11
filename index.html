@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>Storificate framework</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width">
+
+		<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+		<link rel="stylesheet" href="css/normalize.css">
+		<link rel="stylesheet" href="css/main.css">
+
+		  <script type="text/javascript" src="js/vendor/d3.v2.js"></script>
+		  <script type="text/javascript" src="js/vendor/showdown.js"></script>
+		  <script type="text/javascript" src="js/vendor/mootools-1.4.1-core.js"></script>
+		  <script type="text/javascript" src="js/vendor/mootools-1.4.0.1-more.js"></script>
+          <script type="text/javascript" src="js/vendor/cordova-2.6.0.js"></script>
+		  <script type="text/javascript" src="js/main.js"></script>
+	
+	</head>
+	
+	<input type="hidden" id="ChapterOne" value="[{&quot;renderLogic&quot; : &quot;Chapter_1/Pages/1/1.js&quot;,&quot;textView&quot;:{&quot;content&quot;: &quot;Chapter_1/Pages/1/1.md&quot;,&quot;contentType&quot;: &quot;file&quot;, /* Can be file or text */&quot;fileFormat&quot;: &quot;markdown&quot;, /* this parameter is optional. If not specified and contentType is file it assumed that the fileformat is markdown */&quot;position&quot;:{&quot;x&quot;:{&quot;value&quot;:4,&quot;type&quot;: &quot;percentage&quot;},&quot;y&quot;:{&quot;value&quot;:4,&quot;type&quot;: &quot;em&quot;},&quot;width&quot;:{&quot;value&quot;:4,&quot;type&quot;: &quot;pixel&quot;},&quot;height&quot;:{&quot;value&quot;:null,&quot;type&quot;: &quot;auto&quot;},}}},{&quot;renderLogic&quot; : &quot;Chapter_1/Pages/2/2.js&quot;,&quot;textView&quot;:{&quot;content&quot;: &quot;Chapter_1/Pages/2/2.md&quot;,&quot;contentType&quot;: &quot;file&quot;, /* Can be file or text */&quot;fileFormat&quot;: &quot;markdown&quot;, /* this parameter is optional. If not specified and contentType is file it assumed that the fileformat is markdown */&quot;position&quot;:{&quot;x&quot;:{&quot;value&quot;:4,&quot;type&quot;: &quot;percentage&quot;},&quot;y&quot;:{&quot;value&quot;:4,&quot;type&quot;: &quot;em&quot;},&quot;width&quot;:{&quot;value&quot;:4,&quot;type&quot;: &quot;pixel&quot;},&quot;height&quot;:{&quot;value&quot;:null,&quot;type&quot;: &quot;auto&quot;},}}},{&quot;renderLogic&quot; : &quot;Chapter_1/Pages/3/3.js&quot;,&quot;textView&quot;:{&quot;content&quot;: &quot;A dummy text to test if text can be displayed without a file&quot;,&quot;contentType&quot;: &quot;text&quot;, /* Can be file or text */&quot;position&quot;:{&quot;x&quot;:{&quot;value&quot;:4,&quot;type&quot;: &quot;percentage&quot;},&quot;y&quot;:{&quot;value&quot;:4,&quot;type&quot;: &quot;em&quot;},&quot;width&quot;:{&quot;value&quot;:60,&quot;type&quot;: &quot;pixel&quot;},&quot;height&quot;:{&quot;value&quot;:null,&quot;type&quot;: &quot;auto&quot;},}}}]">
+
+	<body>
+		<header class="block">
+				<nav id="mainNav">
+					 <a id="gotoMenu" class="button" href="javascript:{}">Menu</a>
+					 <a id="gotoCurrentPage" class="button" href="javascript:{}">Current Page</a>
+					 <a id="gotoCurrentPage" class="button" href="javascript:{}">Current Page</a>
+				</nav>		
+		</header>
+		<div id="mainDisplayArea">
+		
+			<div id="textView">
+				<button class="minimizer" data-state="maximized">-</button>
+				<div class="textArea"></div>
+				<button class="previousPage">back</button>
+				<button class="nextPage">next</button>
+			</div>
+		
+		</div>
+	</body>
+</html>
