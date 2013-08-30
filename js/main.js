@@ -130,26 +130,9 @@ var Page = new Class({
 
 
 
- // Wait for device API libraries to load
-    //
-    document.addEventListener("deviceready", onDeviceReady, false);
+// Wait for device API libraries to load
+document.addEventListener("deviceready", function(event){
+	
 
-    // device APIs are available
-    //
-    function onDeviceReady() {
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
-    }
 
-    function gotFS(fileSystem) {
-        console.log(fileSystem);
-        fileSystem.root.getFile("D:/Projects/Web/Storificate/Chapters/Chapter_1/Pages/1/1.md", {create: true, exclusive: false}, gotFileEntry, fail);
-    }
-function fail(e){
-    console.log(e);
-}
-
-function gotFileEntry(file){
-    
-    console.log(file);
-
-}
+}, false);
