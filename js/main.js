@@ -7,16 +7,6 @@
 console.log((MooTools)? 'Loading MooTools, version '+ MooTools.version : 'MooTools could not be loaded' );
 console.log((d3)? 'Loading d3, version '+ d3.version : 'd3 could not be loaded' );
 
-
-$(document).addEvent('domready', function (domreadyevent) {
-	// Initialize the Menu:
-	Menu.initialize();
-	// Initialize the Book:
-	book = new Book('Chapters'); // book is intentionally a global, keep it this way.
-	
-});
-
-
 var Menu = {
 
 	mainNav: null,
@@ -59,17 +49,19 @@ var Book = new Class({
 
 	loadChapter: function(chapterNumber){
 
-		this.currentChapter = 1;
-		this.currentChapterData = JSON.decode($('ChapterOne').value);
-		this.currentPage = 3;
-		this.loadPagelogic();
+		var self = this;
+		d3.json("Chapters/" + chapterNumber + ".json", function(json,error) {
+			
+			if (error) return console.error(error);
+			self.currentChapterData = json;
+			self.currentPage = 1;
+			
+			self.loadPagelogic();
+		});
 	},
 
 	loadPagelogic: function(){
-		if($('pageLogic')){
-
-			$('pageLogic').destroy();
-		}
+		if($('pageLogic'))	$('pageLogic').destroy();
 
 		Asset.javascript(this.bookLocation + "/" + this.currentChapterData[this.currentPage-1].renderLogic,{
 			id: "pageLogic"
@@ -132,7 +124,9 @@ var Page = new Class({
 
 // Wait for device API libraries to load
 document.addEventListener("deviceready", function(event){
-	
 
-
+	// Initialize the Menu:
+	Menu.initialize();
+	// Initialize the Book:
+	book = new Book('Chapters'); // book is intentionally a global, keep it this way.
 }, false);

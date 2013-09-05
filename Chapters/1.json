@@ -1,81 +1,27 @@
 [
 	{
-		"renderLogic" : "Chapter_1/Pages/1/1.js",
+		"renderLogic" : "Chapter_1\/Pages\/1\/1.js",
 		"textView":{
-			"content": 		"Chapter_1/Pages/1/1.md",
-			"contentType": 	"file", /* Can be file or text */
-			"fileFormat": 	"markdown", /* this parameter is optional. If not specified and contentType is file it assumed that the fileformat is markdown */
-			"position":{
-				"x":{
-					"value":	4,
-					"type": 	"percentage"
-				},
-				"y":{
-					"value":	4,
-					"type": 	"em"
-				},
-				"width":{
-					"value":	4,
-					"type": 	"pixel"
-				},
-				"height":{
-					"value":	null,
-					"type": 	"auto"
-				},		
-			}	
+			"content": 		"Chapter_1\/Pages\/1\/1.md",
+			"contentType": 	"file", 
+			"fileFormat": 	"markdown"
 		}		
 	},
 
 	{
-		"renderLogic" : "Chapter_1/Pages/2/2.js",
+		"renderLogic" : "Chapter_1\/Pages\/2\/2.js",
 		"textView":{
-			"content": 		"Chapter_1/Pages/2/2.md",
-			"contentType": 	"file", /* Can be file or text */
-			"fileFormat": 	"markdown", /* this parameter is optional. If not specified and contentType is file it assumed that the fileformat is markdown */
-			"position":{
-				"x":{
-					"value":	4,
-					"type": 	"percentage"
-				},
-				"y":{
-					"value":	4,
-					"type": 	"em"
-				},
-				"width":{
-					"value":	4,
-					"type": 	"pixel"
-				},
-				"height":{
-					"value":	null,
-					"type": 	"auto"
-				},		
-			}	
+			"content": 		"Chapter_1\/Pages\/2\/2.md",
+			"contentType": 	"file",
+			"fileFormat": 	"markdown"	
 		}		
 	},
 
 	{
-		"renderLogic" : "Chapter_1/Pages/3/3.js",
+		"renderLogic" : "Chapter_1\/Pages\/3\/3.js",
 		"textView":{
 			"content": 		"A dummy text to test if text can be displayed without a file",
-			"contentType": 	"text", /* Can be file or text */
-			"position":{
-				"x":{
-					"value":	4,
-					"type": 	"percentage"
-				},
-				"y":{
-					"value":	4,
-					"type": 	"em"
-				},
-				"width":{
-					"value":	4,
-					"type": 	"pixel"
-				},
-				"height":{
-					"value":	null,
-					"type": 	"auto"
-				},		
-			}	
+			"contentType": 	"text"
 		}		
 	}
 ]
