@@ -14,7 +14,7 @@ Storificate.Menu = {
 
 	initialize: function(){
 
-		this.mainNav = $('mainNav');
+		this.mainNav = document.getElementById('mainNav');
 		if(this.mainNav){
 
 			console.debug(this.mainNav);
@@ -23,107 +23,134 @@ Storificate.Menu = {
 	}
 };
 
-Storificate.Book = new Class({
+/**
+ * The Book Class.
+ */
+
+Storificate.Book = function (bookLocation){
     
-	chapters: {},
-	currentChapter: 0,
-	currentPage: 0,
-	bookLocation: null,
-	currentChapterData: null,
-	displayArea: null,
-	textView: null,
+	this.chapters = {};
+	this.currentChapter = 0;
+	this.currentPage = 0;
+	this.currentChapterData = null;
 
-	initialize: function(bookLocation){
+	console.log('initializing the Book.');
+	this.bookLocation = bookLocation;
 
-		console.log('initializing the Book.');
-		this.bookLocation = bookLocation;
+	//this.compileListOfChapters();
+	this.loadChapter(1);
+	this.displayArea = document.getElementById('mainDisplayArea');
+	this.textView = document.getElementById('textView');
+};
 
-		//this.compileListOfChapters();
-		this.loadFirstChapter();
-		this.displayArea = $('mainDisplayArea');
-		this.textView = $('textView');
-	},
+/**
+ * The loadChapter method of the Book Class.
+ * @param  {integer} chapterNumber The number of the chapter that needs to be loaded
+ * @return {void}
+ */
+Storificate.Book.prototype.loadChapter = function (chapterNumber){
 
-	loadFirstChapter: function(){
-		this.loadChapter(1);
-	},
+	var self = this;
+	Storificate.Ajax.json("Chapters/" + chapterNumber + ".json", function(json,error) {
+		
+		if (error) return console.error(error);
+		self.currentChapterData = json;
+		self.currentPage = 1;
+		
+		self.loadPagelogic();
+	});
+};
 
-	loadChapter: function(chapterNumber){
+/**
+ * The loadPagelogic method of the Book Class. This method loads the logic (javascript) associated with a page.
+ * All the other resources should be loaded via the page logic file.
+ * @return {void}
+ */
+Storificate.Book.prototype.loadPagelogic = function(){
 
-		var self = this;
-		Storificate.Ajax.json("Chapters/" + chapterNumber + ".json", function(json,error) {
-			
-			if (error) return console.error(error);
-			self.currentChapterData = json;
-			self.currentPage = 1;
-			
-			self.loadPagelogic();
-		});
-	},
+	var self = this;
+	var pageLogicElement = null;
+	pageLogicElement = document.getElementById("pageLogic");
 
-	loadPagelogic: function(){
-		if($('pageLogic'))	$('pageLogic').destroy();
+	if(pageLogicElement) pageLogicElement.parentNode.removeChild(pageLogicElement);
 
-		Asset.javascript(this.bookLocation + "/" + this.currentChapterData[this.currentPage-1].renderLogic,{
-			id: "pageLogic"
-		});
-	},
-});
 
-Storificate.Page = new Class({
+	if (document.createElement && document.getElementsByTagName) {
+        
+        var script_tag = document.createElement('script');
+        script_tag.setAttribute('type', 'text/javascript');
+        script_tag.setAttribute('id', 'pageLogic');
+        script_tag.setAttribute('src', self.bookLocation + "/" + self.currentChapterData[self.currentPage-1].renderLogic);
+        document.getElementsByTagName('body')[0].appendChild(script_tag);
+    }
+};
+
+/**
+ * The Page Class.
+ */
+Storificate.Page = function(){
 	// fully dependent on the existence of the global book variable.
+	//FIXME: This dependency on a global variable called book is very unsafe!!!
+	this.currentChapter = book.currentChapter;
+	this.currentPage = book.currentPage;
+	this.pageData = book.currentChapterData[this.currentPage-1];
+};
 
-	currentChapter: null,
-	currentPage: null,
-	pageData:null,
-
-	initialize: function(){
-
-		this.currentChapter = book.currentChapter;
-		this.currentPage = book.currentPage;
-		this.pageData = book.currentChapterData[this.currentPage-1];
-	},
-
-	dataChecksOut:function(){
+/**
+ * Loads the text for a page. The format of the page is figured out inside the method.
+ * @return {void}
+ */
+Storificate.Page.prototype.loadTextView = function(){
 		
-		return true;
-	},
+	var formattedText = "Test";
 
-	loadTextView: function(){
-		
-		var formattedText = "";
+	if(this.dataChecksOut){
 
-		if(this.dataChecksOut){
+		if(this.pageData.textView.contentType == undefined ||
+			this.pageData.textView.contentType == null ||
+			this.pageData.textView.contentType == 'markdown'){
 
-			if(this.pageData.textView.contentType == undefined ||
-				this.pageData.textView.contentType == null ||
-				this.pageData.textView.contentType == 'markdown'){
-
-					formattedText = this.parseMarkdown(this.pageData.textView.content);
-			}
-			else if(this.pageData.textView.contentType == 'text'){
-
-					formattedText = this.pageData.textView.content; // Since we expect only simple text with some html formatting.
-			}
-			else{
-		
-				console.error("Well, ain't got a clue what data format we're dealing with.");
-			}
+				formattedText = this.parseMarkdown(this.pageData.textView.content);
 		}
-		
-		textView.getElement('.textArea').innerHTML = formattedText;
-	},
+		else if(this.pageData.textView.contentType == 'text'){
 
-	parseMarkdown: function(markdownText){
-
-		return markdownText;
+				formattedText = this.pageData.textView.content; // Since we expect only simple text with some html formatting.
+		}
+		else{
+	
+			console.error("Well, ain't got a clue what data format we're dealing with.");
+		}
 	}
 
-});
+	textView.getElementsByClassName('textArea')[0].innerHTML = formattedText;
+};
+
+/**
+ * Method of the Page Class that handles the parsing of MarkDown text.
+ * @param  {string} markdownText string containing the raw MarkDown text.
+ * @return {string}              The HTML version of the MarkDown text. 
+ */
+Storificate.Page.prototype.parseMarkdown = function(markdownText){
+
+		return markdownText;
+};
 
 
+/**
+ * Collection of Different types of Ajax calls.
+ * The methods in this Object are direct copies of the ones used in the d3 code written by Mike Bostock.
+ * The only thing that was changed was the formatting of the methods.
+ * @type {Object}
+ */
 Storificate.Ajax = {
 
+	/**
+	 * Method of the Ajax Object that does the actual AJAX call
+	 * @param  {string}   url      Path to the file.
+	 * @param  {string}   mime     The mime type of the file.
+	 * @param  {Function} callback The Callback to run when the AJAX call is complete.
+	 * @return {void}
+	 */
 	xhr: function(url, mime, callback) {
     
 		var req = new XMLHttpRequest;
@@ -143,7 +170,13 @@ Storificate.Ajax = {
 		req.send(null);
 	},
 
-
+	/**
+	 * Method of the Ajax Object that gets a text.
+	 * @param  {string}   url      Path to the file.
+	 * @param  {string}   mime     The mime type of the file.
+	 * @param  {Function} callback The Callback to run when the AJAX call is complete.
+	 * @return {void}
+	 */
 	text: function(url, mime, callback) {
 	
 		function ready(req) {
@@ -159,7 +192,12 @@ Storificate.Ajax = {
 		this.xhr(url, mime, ready);
 	},
 
-
+	/**
+	 * Method of the Ajax Object that gets a json object from a file
+	 * @param  {string}   url      Path to the json file.
+	 * @param  {Function} callback The Callback to run when the AJAX call is complete.
+	 * @return {void}
+	 */
 	json: function(url, callback) {
 
 		this.text(url, "application/json", function(text) {
@@ -168,6 +206,12 @@ Storificate.Ajax = {
 		});
 	},
 
+	/**
+	 * Method of the Ajax Object that gets HTML from a file
+	 * @param  {string}   url      Path to the file.
+	 * @param  {Function} callback The Callback to run when the AJAX call is complete.
+	 * @return {void}
+	 */
 	html: function(url, callback) {
 		
 		this.text(url, "text/html", function(text) {
@@ -182,5 +226,3 @@ Storificate.Ajax = {
 		});
 	}
 };
-
-
