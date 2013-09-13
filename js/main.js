@@ -5,7 +5,6 @@
  */
 
 console.log((MooTools)? 'Loading MooTools, version '+ MooTools.version : 'MooTools could not be loaded' );
-console.log((d3)? 'Loading d3, version '+ d3.version : 'd3 could not be loaded' );
 
 // Wait for device API libraries to load
 document.addEventListener("deviceready", function(event){
