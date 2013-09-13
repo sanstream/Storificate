@@ -30,8 +30,8 @@ Storificate.Menu = {
 Storificate.Book = function (bookLocation){
     
 	this.chapters = {};
-	this.currentChapter = 0;
-	this.currentPage = 0;
+	this.currentChapter = null;
+	this.currentPage = null;
 	this.currentChapterData = null;
 
 	console.log('initializing the Book.');
@@ -55,10 +55,20 @@ Storificate.Book.prototype.loadChapter = function (chapterNumber){
 		
 		if (error) return console.error(error);
 		self.currentChapterData = json;
-		self.currentPage = 1;
 		
-		self.loadPagelogic();
+		self.currentPage = new Storificate.Page(self.currentChapterData[0]);
 	});
+};
+
+/**
+ * The Page Class.
+ */
+Storificate.Page = function(pageData){
+
+	this.pageData = pageData;
+
+	this.loadPagelogic();
+	this.loadTextView();
 };
 
 /**
@@ -66,7 +76,7 @@ Storificate.Book.prototype.loadChapter = function (chapterNumber){
  * All the other resources should be loaded via the page logic file.
  * @return {void}
  */
-Storificate.Book.prototype.loadPagelogic = function(){
+Storificate.Page.prototype.loadPagelogic = function(){
 
 	var self = this;
 	var pageLogicElement = null;
@@ -80,20 +90,9 @@ Storificate.Book.prototype.loadPagelogic = function(){
         var script_tag = document.createElement('script');
         script_tag.setAttribute('type', 'text/javascript');
         script_tag.setAttribute('id', 'pageLogic');
-        script_tag.setAttribute('src', self.bookLocation + "/" + self.currentChapterData[self.currentPage-1].renderLogic);
+        script_tag.setAttribute('src',"Chapters/" + self.pageData.renderLogic);
         document.getElementsByTagName('body')[0].appendChild(script_tag);
     }
-};
-
-/**
- * The Page Class.
- */
-Storificate.Page = function(){
-	// fully dependent on the existence of the global book variable.
-	//FIXME: This dependency on a global variable called book is very unsafe!!!
-	this.currentChapter = book.currentChapter;
-	this.currentPage = book.currentPage;
-	this.pageData = book.currentChapterData[this.currentPage-1];
 };
 
 /**
