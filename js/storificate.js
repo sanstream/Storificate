@@ -4,7 +4,11 @@
  * @copyright Sanstream Creations 2013
  */
 
-var Menu = {
+
+var Storificate = {};
+
+
+Storificate.Menu = {
 
 	mainNav: null,
 
@@ -19,7 +23,7 @@ var Menu = {
 	}
 };
 
-var Book = new Class({
+Storificate.Book = new Class({
     
 	chapters: {},
 	currentChapter: 0,
@@ -47,7 +51,7 @@ var Book = new Class({
 	loadChapter: function(chapterNumber){
 
 		var self = this;
-		d3.json("Chapters/" + chapterNumber + ".json", function(json,error) {
+		Storificate.Ajax.json("Chapters/" + chapterNumber + ".json", function(json,error) {
 			
 			if (error) return console.error(error);
 			self.currentChapterData = json;
@@ -66,7 +70,7 @@ var Book = new Class({
 	},
 });
 
-var Page = new Class({
+Storificate.Page = new Class({
 	// fully dependent on the existence of the global book variable.
 
 	currentChapter: null,
@@ -116,3 +120,67 @@ var Page = new Class({
 	}
 
 });
+
+
+Storificate.Ajax = {
+
+	xhr: function(url, mime, callback) {
+    
+		var req = new XMLHttpRequest;
+		
+		if (arguments.length < 3)     			callback = mime, mime = null; 
+		else if (mime && req.overrideMimeType)  req.overrideMimeType(mime);
+
+		req.open("GET", url, true);
+
+		if (mime) req.setRequestHeader("Accept", mime);
+		req.onreadystatechange = function() {
+		  if (req.readyState === 4) {
+		    var s = req.status;
+		    callback(!s && req.response || s >= 200 && s < 300 || s === 304 ? req : null);
+		  }
+		};
+		req.send(null);
+	},
+
+
+	text: function(url, mime, callback) {
+	
+		function ready(req) {
+		
+			callback(req && req.responseText);
+		}
+		if (arguments.length < 3) {
+		
+		  callback = mime;
+		  mime = null;
+		}
+		
+		this.xhr(url, mime, ready);
+	},
+
+
+	json: function(url, callback) {
+
+		this.text(url, "application/json", function(text) {
+		  
+		  callback(text ? JSON.parse(text) : null);
+		});
+	},
+
+	html: function(url, callback) {
+		
+		this.text(url, "text/html", function(text) {
+			
+			if (text != null) {
+			
+				var range = document.createRange();
+				range.selectNode(document.body);
+				text = range.createContextualFragment(text);
+			}
+			callback(text);
+		});
+	}
+};
+
+

@@ -9,7 +9,7 @@ var pageLogic = {
 		// body...
 		console.log('page logic for page 1 loaded.');
 
-		var page = new Page(); // automatically loads th logic for the current page.
+		var page = new Storificate.Page(); // automatically loads th logic for the current page.
 
 		//initialize the textview
 		// Along the lines of:
