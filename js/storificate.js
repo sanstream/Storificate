@@ -67,8 +67,31 @@ Storificate.Page = function(pageData){
 
 	this.pageData = pageData;
 
+	this.beforeTextShown = null;
+	this.duringTextShown = null;
+	this.afterTextShown = null;
+
 	this.loadPagelogic();
+};
+
+Storificate.Page.prototype.initialize = function () {
+
+	if(this.beforeTextShown && typeof this.beforeTextShown === 'function'){
+
+		this.beforeTextShown();
+	}
+
 	this.loadTextView();
+
+	if(this.duringTextShown && typeof this.duringTextShown === 'function'){
+
+		this.duringTextShown();
+	}
+
+	if(this.afterTextShown && typeof this.afterTextShown === 'function'){
+
+		this.afterTextShown();
+	}
 };
 
 /**

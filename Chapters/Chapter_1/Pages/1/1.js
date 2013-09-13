@@ -3,12 +3,18 @@
  * @author Sanne Peters sanne@sanstream.nl
  */
 
-var pageLogic = {
 
-	initialize: function() {
-		// body...
-		console.log('page logic for page 1 loaded.');
-	}
+book.currentPage.beforeTextShown = function () {
+
+	console.log("Loading the beforeTextShown method works!");
 };
 
-pageLogic.initialize();
+book.currentPage.duringTextShown = function () {
+
+};
+
+book.currentPage.afterTextShown = function () {
+
+};
+
+book.currentPage.initialize();
