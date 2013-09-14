@@ -27,18 +27,18 @@ Storificate.Menu = {
  * The Book Class.
  */
 
-Storificate.Book = function (bookLocation){
+Storificate.Book = function (bookLocation, currentChapterNumber, currentPageNumber){
     
-	this.chapters = {};
-	this.currentChapter = null;
+	this.currentChapterNumber = currentChapterNumber;
 	this.currentPage = null;
+	this.currentPageNumber = currentPageNumber;
 	this.currentChapterData = null;
 
 	console.log('initializing the Book.');
 	this.bookLocation = bookLocation;
 
 	//this.compileListOfChapters();
-	this.loadChapter(1);
+	this.loadChapter( (this.currentChapterNumber)? currentChapterNumber : 1);
 	this.displayArea = document.getElementById('mainDisplayArea');
 	this.textView = document.getElementById('textView');
 };
@@ -48,18 +48,57 @@ Storificate.Book = function (bookLocation){
  * @param  {integer} chapterNumber The number of the chapter that needs to be loaded
  * @return {void}
  */
-Storificate.Book.prototype.loadChapter = function (chapterNumber){
+Storificate.Book.prototype.loadChapter = function (chapterNumber) {
 
 	var self = this;
 	Storificate.Ajax.json("Chapters/" + chapterNumber + ".json", function(json,error) {
 		
 		if (error) return console.error(error);
 		self.currentChapterData = json;
-		
-		self.currentPage = new Storificate.Page(self.currentChapterData[0]);
+
+		self.loadPage( (self.currentPageNumber)? self.currentPageNumber : 1);		
 	});
 };
 
+Storificate.Book.prototype.loadPage = function (pageNumber) {
+
+	var self = this;
+	self.currentPage = new Storificate.Page( self.currentChapterData[ pageNumber - 1 ] );
+	self.currentPageNumber = pageNumber;
+};
+
+Storificate.Book.prototype.nextChapter = function () {
+
+};
+
+Storificate.Book.prototype.prevChapter = function () {
+
+};
+
+Storificate.Book.prototype.nextPage = function () {
+
+	var self = this;
+
+	if ( self.currentChapterData.length  == self.currentPageNumber) {
+		// Go to the next Chapter:
+		self.nextChapter();
+	}
+	else self.loadPage(self.currentPageNumber + 1);	
+};
+
+Storificate.Book.prototype.prevPage = function () {
+
+	var self = this;
+
+	if (self.currentPageNumber == 1) {
+		 // Go back to the last page of the previous chapter, because we are at the first page of a chapter.
+	}
+	else{
+
+		self.loadPage( self.currentPageNumber - 1);	
+	}
+	
+};
 /**
  * The Page Class.
  */

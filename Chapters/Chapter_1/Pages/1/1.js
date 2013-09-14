@@ -6,7 +6,6 @@
 
 book.currentPage.beforeTextShown = function () {
 
-	console.log("Loading the beforeTextShown method works!");
 };
 
 book.currentPage.duringTextShown = function () {
