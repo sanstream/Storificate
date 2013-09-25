@@ -16,13 +16,3 @@ document.addEventListener("deviceready", function(event){
 	// Initialize the Book:
 	book = new Storificate.Book('Chapters'); // book is intentionally a global, keep it this way.
 }, false);
-
-// for Web Apps:
-document.addEventListener("DOMContentLoaded", function(event){
-
-	// Initialize the Menu:
-	Storificate.Menu.initialize();
-	// Initialize the Book:
-	book = new Storificate.Book('Chapters'); // book is intentionally a global, keep it this way.
-}, false);
-
