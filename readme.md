@@ -46,7 +46,7 @@ The framework depends on a JSON data structure which defines the Chapters and al
 					{
 						"renderLogic" : "Chapter_1\/Pages\/2\/2.js",
 						"textView":{
-							"content": 		"The text of the first page of the first chapter.",
+							"content": 		"The text of the second page of the first chapter.",
 							"contentType": 	"text"
 						}		
 					},
