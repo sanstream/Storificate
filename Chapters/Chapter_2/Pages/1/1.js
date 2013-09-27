@@ -5,7 +5,6 @@
 
 book.currentPage.beforeTextShown = function () {
 
-	
 };
 
 book.currentPage.duringTextShown = function () {

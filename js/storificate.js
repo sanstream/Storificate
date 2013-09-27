@@ -7,91 +7,90 @@
 
 var Storificate = {};
 
-
-Storificate.Menu = {
-
-	mainNav: null,
-
-	initialize: function(){
-
-		this.mainNav = document.getElementById('mainNav');
-		if(this.mainNav){
-
-			console.debug(this.mainNav);
-
-		}
-	}
-};
-
 /**
  * The Book Class.
  */
 
 Storificate.Book = function (bookLocation, currentChapterNumber, currentPageNumber){
     
-	this.currentChapterNumber = currentChapterNumber;
+	this.currentChapterNumber = (typeof this.currentChapterNumber == 'undefined')? 1 : currentChapterNumber;
 	this.currentPage = null;
-	this.currentPageNumber = currentPageNumber;
+	this.currentPageNumber = (typeof this.currentPageNumber == 'undefined')? 1 : currentPageNumber;
 	this.currentChapterData = null;
 
 	console.log('initializing the Book.');
 	this.bookLocation = bookLocation;
 
-	//this.compileListOfChapters();
-	this.loadChapter( (this.currentChapterNumber)? currentChapterNumber : 1);
+	this.loadChapter();
 	this.displayArea = document.getElementById('mainDisplayArea');
-	this.textView = document.getElementById('textView');
+	this.textView = document.getElementById('textArea');
 };
 
 /**
  * The loadChapter method of the Book Class.
- * @param  {integer} chapterNumber The number of the chapter that needs to be loaded
  * @return {void}
  */
-Storificate.Book.prototype.loadChapter = function (chapterNumber) {
+Storificate.Book.prototype.loadChapter = function () {
 
 	var self = this;
-	Storificate.Ajax.json("Chapters/" + chapterNumber + ".json", function(json,error) {
+	Storificate.Ajax.json("Chapters/" + this.currentChapterNumber + ".json",
+		function(json,error) {
 		
-		if (error) return console.error(error);
-		self.currentChapterData = json;
+			if (error) return console.error(error);
+			self.currentChapterData = json;
 
-		self.loadPage( (self.currentPageNumber)? self.currentPageNumber : 1);		
+			//console.log('loaded Chapter data:',self.currentChapterData);
+			self.loadPage((self.currentPageNumber)? self.currentPageNumber : 1);		
 	});
 };
 
 Storificate.Book.prototype.loadPage = function (pageNumber) {
 
 	var self = this;
-	self.currentPage = new Storificate.Page( self.currentChapterData[ pageNumber - 1 ] );
+	self.currentPage = new Storificate.Page( self.currentChapterData[ pageNumber - 1 ], this.textView);
 	self.currentPageNumber = pageNumber;
+	//console.log('loaded page Object:',self.currentPage);
 };
 
-Storificate.Book.prototype.nextChapter = function () {
+Storificate.Book.prototype.goToNextChapter = function () {
+
+	console.log('this Chapter:',this.currentChapterNumber ,
+		' next chapter will be:', this.currentChapterNumber + 1);
+	this.currentChapterNumber += 1;
+	this.currentPageNumber = 1;
+	this.loadChapter();
 
 };
 
-Storificate.Book.prototype.prevChapter = function () {
+Storificate.Book.prototype.goToPrevChapter = function () {
 
+	if (this.currentChapterNumber == 1) return 0;
+	this.currentChapterNumber -= 1;
+	this.loadChapter();
 };
 
-Storificate.Book.prototype.nextPage = function () {
+Storificate.Book.prototype.goToNextPage = function () {
 
 	var self = this;
 
-	if ( self.currentChapterData.length  == self.currentPageNumber) {
+	self.currentPageNumber += 1;
+	console.log(' current page number:', self.currentPageNumber);
+	console.log('pages in chapter:', self.currentChapterData.length);
+
+	if ( self.currentChapterData.length  < self.currentPageNumber) {
 		// Go to the next Chapter:
-		self.nextChapter();
+		self.goToNextChapter();
 	}
-	else self.loadPage(self.currentPageNumber + 1);	
+	else self.loadPage(self.currentPageNumber);	
 };
 
-Storificate.Book.prototype.prevPage = function () {
+Storificate.Book.prototype.goToPrevPage = function () {
 
 	var self = this;
 
 	if (self.currentPageNumber == 1) {
 		 // Go back to the last page of the previous chapter, because we are at the first page of a chapter.
+		 self.goToPrevChapter();
 	}
 	else{
 
@@ -102,9 +101,10 @@ Storificate.Book.prototype.prevPage = function () {
 /**
  * The Page Class.
  */
-Storificate.Page = function(pageData){
+Storificate.Page = function(pageData, textView){
 
 	this.pageData = pageData;
+	this.textView = textView;
 
 	this.beforeTextShown = null;
 	this.duringTextShown = null;
@@ -165,25 +165,23 @@ Storificate.Page.prototype.loadTextView = function(){
 		
 	var formattedText = "Test";
 
-	if(this.dataChecksOut){
+	if(this.pageData.textView.contentType == undefined ||
+		this.pageData.textView.contentType == null ||
+		this.pageData.textView.contentType == 'file'){
 
-		if(this.pageData.textView.contentType == undefined ||
-			this.pageData.textView.contentType == null ||
-			this.pageData.textView.contentType == 'markdown'){
+			formattedText = this.parseMarkdown(this.pageData.textView.content);
+	}
+	else if(this.pageData.textView.contentType == 'text'){
 
-				formattedText = this.parseMarkdown(this.pageData.textView.content);
-		}
-		else if(this.pageData.textView.contentType == 'text'){
+			formattedText = this.pageData.textView.content; // Since we expect only simple text with some html formatting.
+	}
+	else{
 
-				formattedText = this.pageData.textView.content; // Since we expect only simple text with some html formatting.
-		}
-		else{
-	
-			console.error("Well, ain't got a clue what data format we're dealing with.");
-		}
+		console.error("Well, ain't got a clue what data format we're dealing with.");
 	}
 
-	textView.getElementsByClassName('textArea')[0].innerHTML = formattedText;
+	console.log(this.pageData);
+	this.textView.innerHTML = formattedText;
 };
 
 /**

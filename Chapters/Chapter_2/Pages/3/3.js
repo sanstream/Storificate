@@ -3,6 +3,3 @@
  * @author Sanne Peters sanne@sanstream.nl
  * @description This code gets automatically initialized.
  */
-
-console.log('testje');
-book.currentPage.initialize();

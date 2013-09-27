@@ -2,18 +2,16 @@
 	{
 		"renderLogic" : "Chapter_1\/Pages\/1\/1.js",
 		"textView":{
-			"content": 		"Chapter_1\/Pages\/1\/1.md",
-			"contentType": 	"file", 
-			"fileFormat": 	"markdown"
+			"content": 		"Chapter 1, the beginning",
+			"contentType": 	"text"
 		}		
 	},
 
 	{
 		"renderLogic" : "Chapter_1\/Pages\/2\/2.js",
 		"textView":{
-			"content": 		"Chapter_1\/Pages\/2\/2.md",
-			"contentType": 	"file",
-			"fileFormat": 	"markdown"	
+			"content": 		"Chapter 1, La die da",
+			"contentType": 	"text"
 		}		
 	},
 
