@@ -13,11 +13,11 @@ var Storificate = {};
 
 Storificate.Book = function (bookLocation, currentChapterNumber, currentPageNumber){
     
-    this.bookData = null;
+    this.bookStructure = null;
+    this.currentChapter = null;
 	this.currentChapterNumber = (typeof this.currentChapterNumber == 'undefined')? 1 : currentChapterNumber;
 	this.currentPage = null;
 	this.currentPageNumber = (typeof this.currentPageNumber == 'undefined')? 1 : currentPageNumber;
-	this.currentChapterData = null;
 
 	console.log('initializing the Book.');
 	this.bookLocation = bookLocation;
@@ -36,9 +36,9 @@ Storificate.Book.prototype.loadBook = function(){
 	Storificate.Ajax.json(this.bookLocation, function(json,error) {
 
 		if (error) return console.error(error);
-		self.bookData = json;
+		self.bookStructure = json;
 
-		console.log(self.bookData);
+		console.log(self.bookStructure);
 		self.loadChapter();
 	});
 };
@@ -53,9 +53,9 @@ Storificate.Book.prototype.loadChapter = function () {
 
 	var self = this;
 
-	self.currentChapterData = self.bookData.data[this.currentChapterNumber - 1].data;
+	self.currentChapter = self.bookStructure.data[this.currentChapterNumber - 1];
 
-	if(self.loadLastPage) self.currentPageNumber = self.currentChapterData.length;
+	if(self.loadLastPage) self.currentPageNumber = self.currentChapter.data.length;
 	self.loadLastPage = false; // resetting it for future use.
 	// load the page that we need:
 	self.loadPage((self.currentPageNumber)? self.currentPageNumber : 1);
@@ -68,13 +68,13 @@ Storificate.Book.prototype.loadPage = function (pageNumber) {
 
 	console.log(' chapter:', self.currentChapterNumber, 'page:', self.currentPageNumber);
 
-	self.currentPage = new Storificate.Page( self.currentChapterData[ pageNumber - 1 ], this.textView);
+	self.currentPage = new Storificate.Page( self.currentChapter.data[ pageNumber - 1 ], this.textView);
 	self.currentPageNumber = pageNumber;
 };
 
 Storificate.Book.prototype.goToNextChapter = function () {
 
-	if(this.bookData.data.length == this.currentChapterNumber) return 0;
+	if(this.bookStructure.data.length == this.currentChapterNumber) return 0;
 	this.currentChapterNumber += 1;
 	this.currentPageNumber = 1;
 	this.loadChapter();
@@ -95,7 +95,7 @@ Storificate.Book.prototype.goToNextPage = function () {
 
 	self.currentPageNumber += 1;
 
-	if ( self.currentChapterData.length  < self.currentPageNumber) {
+	if ( self.currentChapter.data.length  < self.currentPageNumber) {
 		// Go to the next Chapter:
 		self.goToNextChapter();
 	}
@@ -181,7 +181,7 @@ Storificate.Page.prototype.loadPagelogic = function(){
  */
 Storificate.Page.prototype.loadTextView = function(){
 		
-	var formattedText = "Test";
+	var formattedText = null;
 
 	if(this.pageData.textView.contentType == undefined ||
 		this.pageData.textView.contentType == null ||
@@ -195,7 +195,7 @@ Storificate.Page.prototype.loadTextView = function(){
 	}
 	else{
 
-		console.error("Well, ain't got a clue what data format we're dealing with.");
+		console.error("The contentType property cannot be found as part of:", this.pageData.textView);
 	}
 
 	console.log(this.pageData);
