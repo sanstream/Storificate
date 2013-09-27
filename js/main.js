@@ -12,7 +12,7 @@ console.log((MooTools)? 'Loading MooTools, version '+ MooTools.version : 'MooToo
 document.addEventListener("deviceready", function(event){
 
 	// Initialize the Book:
-	book = new Storificate.Book('Chapters'); // book is intentionally a global, keep it this way.
+	book = new Storificate.Book('book.json'); // book is intentionally a global, keep it this way.
 
 	$('nextPage').addEvent("click", function(eventObject){
 

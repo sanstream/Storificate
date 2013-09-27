@@ -13,6 +13,7 @@ var Storificate = {};
 
 Storificate.Book = function (bookLocation, currentChapterNumber, currentPageNumber){
     
+    this.bookData = null;
 	this.currentChapterNumber = (typeof this.currentChapterNumber == 'undefined')? 1 : currentChapterNumber;
 	this.currentPage = null;
 	this.currentPageNumber = (typeof this.currentPageNumber == 'undefined')? 1 : currentPageNumber;
@@ -21,11 +22,28 @@ Storificate.Book = function (bookLocation, currentChapterNumber, currentPageNumb
 	console.log('initializing the Book.');
 	this.bookLocation = bookLocation;
 
-	this.loadChapter();
 	this.displayArea = document.getElementById('mainDisplayArea');
 	this.textView = document.getElementById('textArea');
 	this.loadLastPage = false;
+
+	this.loadBook();
 };
+
+Storificate.Book.prototype.loadBook = function(){
+
+	var self  = this;
+
+	Storificate.Ajax.json(this.bookLocation, function(json,error) {
+
+		if (error) return console.error(error);
+		self.bookData = json;
+
+		console.log(self.bookData);
+		self.loadChapter();
+	});
+};
+
+
 
 /**
  * The loadChapter method of the Book Class.
@@ -34,31 +52,29 @@ Storificate.Book = function (bookLocation, currentChapterNumber, currentPageNumb
 Storificate.Book.prototype.loadChapter = function () {
 
 	var self = this;
-	Storificate.Ajax.json("Chapters/" + this.currentChapterNumber + ".json",
-		function(json,error) {
-		
-			if (error) return console.error(error);
-			self.currentChapterData = json;
 
-			if(self.loadLastPage) self.currentPageNumber = self.currentChapterData.length;
-			self.loadLastPage = false; // resetting it for future use.
-			// load the page that we need:
-			self.loadPage((self.currentPageNumber)? self.currentPageNumber : 1);
+	self.currentChapterData = self.bookData.data[this.currentChapterNumber - 1].data;
 
-	});
+	if(self.loadLastPage) self.currentPageNumber = self.currentChapterData.length;
+	self.loadLastPage = false; // resetting it for future use.
+	// load the page that we need:
+	self.loadPage((self.currentPageNumber)? self.currentPageNumber : 1);
 };
 
 Storificate.Book.prototype.loadPage = function (pageNumber) {
 
 	var self = this;
+
+
+	console.log(' chapter:', self.currentChapterNumber, 'page:', self.currentPageNumber);
+
 	self.currentPage = new Storificate.Page( self.currentChapterData[ pageNumber - 1 ], this.textView);
 	self.currentPageNumber = pageNumber;
 };
 
 Storificate.Book.prototype.goToNextChapter = function () {
 
-	console.log('this Chapter:',this.currentChapterNumber ,
-		' next chapter will be:', this.currentChapterNumber + 1);
+	if(this.bookData.data.length == this.currentChapterNumber) return 0;
 	this.currentChapterNumber += 1;
 	this.currentPageNumber = 1;
 	this.loadChapter();
@@ -78,8 +94,6 @@ Storificate.Book.prototype.goToNextPage = function () {
 	var self = this;
 
 	self.currentPageNumber += 1;
-	console.log(' current page number:', self.currentPageNumber);
-	console.log('pages in chapter:', self.currentChapterData.length);
 
 	if ( self.currentChapterData.length  < self.currentPageNumber) {
 		// Go to the next Chapter:
