@@ -7,8 +7,8 @@
 	<preference name="phonegap-version" value="2.0.0" />
 	<preference name="orientation" value="portrait" />
 	
-    <name>Storificate</name>
-    <description>A framework for visual interactive storytelling</description>
+    <name>A little red balloon</name>
+    <description>A showcase for Storificate</description>
     
     <author href="http://sanstream.nl" email="sanne@sanstream.nl">
         Sanne Peters

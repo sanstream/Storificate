@@ -101,142 +101,50 @@ header{
     box-sizing: border-box;
 }
 
-nav#mainNav{
+nav#pageNavigation{
     height: 40px;
     padding: 0.5em 0;
     background: #999;
     box-shadow: 0px 2px 11px 1px #333;
     z-index:20;
-    position:relative;
+    position:absolute;
+    bottom: 0;
+    width: 100%;
 }
 
-nav#mainNav .button{
+#textView{
+    margin: 2em;
+    font-size: 1.1em;
+    color: #efefef;
+}
+
+nav#pageNavigation button{
     display: inline-block;
     vertical-align: middle;
     line-height: 35px;
     height: 35px;
     font-size: 1.2em;
-    box-shadow: 0px 0px 4px #444;
+    border: 1px solid #444;
     margin: 0 0.25em;
     padding: 0 0.5em;
     text-decoration: none;
     color: #222;
+    background: inherit;
+    position: absolute;
 }
 
-nav#mainNav .button:hover,
-nav#mainNav .button:active{
+#previousPage{
+    left: 1em;
+}
+
+#nextPage{
+    right: 1em;
+}
+nav#pageNavigation button:hover,
+nav#pageNavigation button:active{
     box-shadow: 1px 1px 1px 1px #444444 inset;
 }
 
-#mainDisplayArea{
-    height: 100%;
-    position: relative;
-    width: 100%;
-    background-color: #ffffaf;
-}
-
-#textView{
-    position: absolute;
-    left: 12px;
-    top: 12px; 
-    width: 157px;
-    height: auto;   
-    background-color: #999;
-    box-shadow:0px 2px 11px 1px #333;
-    padding: 0.5em 4px;
-    overflow: hidden;
-}
-
-#textView button.minimizer{
-    float: right;
-    border: none;
-
-}
-
-#textView .textArea{
-    background-color: #000;
-    color: #ddd;
-    margin: 2em 0 0.5em 0;
-    padding:1em;
-    overflow-y:scroll;
-}
-
-#textView button{
-    box-shadow: 0px 0px 4px #444;
-    margin: 0;
-    padding: 0 0.5em;
-    text-decoration: none;
-    color: #222;
-    border:none;
-    padding:0.25em;
-    min-width:1.5em;
-}
-
-#textView button.previousPage{
-    float: left;
-}
-
-#textView button.nextPage{
-    float: right;
-}
-
-section.Chapter{
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;   
-    height: 90%;
-    background-color: red;
-}
-
-section.Chapter .Story{
-
-}
-
-section.Chapter .Story .StoryBlock{}
-
-section.Chapter .Annotations{}
-
-section.Chapter .Annotations .AnnotationBlock{}
-
-nav.pagination{
-    height: 0;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box; 
-    background-color: cyan;  
-    width: 100%;
-    overflow-y: visible;
-}
-
-nav.pagination .paginator{
-    background-color: #fefe40;
-    width: 1.5em;
-    height: 2em;
-    bottom: 0;
-    display: block;
-    position: absolute; /* positions relative to the body as its first postioned parent */
-    line-height: 2em;
-    font-size: 1.5em;
-    text-decoration: none;
-    color: #444;
-}
-
-
-nav.pagination #BackATextBlock{
-    border-radius: 0 3em 0 0;
-    left: 0;
-    text-align: right;
-    padding: 1em 1.5em 0 0;
-    box-shadow: inset -1px 3px 18px -3px #555;
-
-}
-
-nav.pagination #ForwardATextBlock{
-    border-radius: 3em 0 0 0;
-    right: 0;
-    text-align: left;
-    padding: 1em 0 0 1.5em;
-}
 /* ==========================================================================
    Helper classes
    ========================================================================== */
