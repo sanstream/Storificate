@@ -22,23 +22,38 @@ The framework depends on a JSON data structure which defines the Chapters and al
 
 """Building such a data-structure might seem like a lot of work, but it just involves a lot of copy-paste work when you have your basis ready"""
 	
-	[
-		{
-			"renderLogic" : "Chapter_1\/Pages\/1\/1.js",
-			"textView":{
-				"content": 		"Chapter 1, the beginning",
-				"contentType": 	"text"
-			}		
-		},
+	{
+	"meta":{
+		"sectionType" : "Book",
+		"name": "The little red balloon"
+	},
 
-		{
-			"renderLogic" : "Chapter_1\/Pages\/2\/2.js",
-			"textView":{
-				"content": 		"Chapter 1, continued",
-				"contentType": 	"text"
-			}		
-		}
-	]
+	"data":[
+			{
+				"meta":{
+					"sectionType" : "Chapter",
+					"name": "The name of the first Chapter"
+				},
+				"data":[
+					{
+						"renderLogic" : "Chapter_1\/Pages\/1\/1.js",
+						"textView":{
+							"content": 		"The text of the first page of the first chapter.",
+							"contentType": 	"text"
+						}		
+					},
+
+					{
+						"renderLogic" : "Chapter_1\/Pages\/2\/2.js",
+						"textView":{
+							"content": 		"The text of the first page of the first chapter.",
+							"contentType": 	"text"
+						}		
+					},
+				]
+			}
+		]
+	}
 
 ###Chapters
 
