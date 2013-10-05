@@ -74,23 +74,36 @@ Storificate.Book.prototype.loadPage = function (pageNumber) {
 	self.currentPageNumber = pageNumber;
 };
 
+/**
+ * Goes to the next Chapter if it is there. If not is does nothing.
+ * @return bool
+ */
 Storificate.Book.prototype.goToNextChapter = function () {
 
-	if(this.bookStructure.data.length == this.currentChapterNumber) return 0;
+	if(this.bookStructure.data.length == this.currentChapterNumber) return false;
 	this.currentChapterNumber += 1;
 	this.currentPageNumber = 1;
 	this.loadChapter();
-
+	return true;
 };
 
+/**
+ * Goes to the previous Chapter if it is there. If not is does nothing.
+ * @return bool
+ */
 Storificate.Book.prototype.goToPrevChapter = function () {
 
-	if (this.currentChapterNumber == 1) return 0;
+	if (this.currentChapterNumber == 1) return false;
 	this.currentChapterNumber -= 1;
 	this.loadLastPage = true; // instead of the first when loading a chapter ;) .
 	this.loadChapter();
+	return true;
 };
 
+/**
+ * Goes to the next page if it is there. If not is does nothing.
+ * @return bool
+ */
 Storificate.Book.prototype.goToNextPage = function () {
 
 	var self = this;
@@ -99,24 +112,29 @@ Storificate.Book.prototype.goToNextPage = function () {
 
 	if ( self.currentChapter.data.length  < self.currentPageNumber) {
 		// Go to the next Chapter:
-		self.goToNextChapter();
+		return self.goToNextChapter();
 	}
 	else self.loadPage(self.currentPageNumber);	
+	return true;
 };
 
+/**
+ * Goes to the previous page if it is there. If not is does nothing.
+ * @return bool
+ */
 Storificate.Book.prototype.goToPrevPage = function () {
 
 	var self = this;
 
 	if (self.currentPageNumber == 1) {
 		 // Go back to the last page of the previous chapter, because we are at the first page of a chapter.
-		 self.goToPrevChapter();
+		 return self.goToPrevChapter();
 	}
 	else{
 
 		self.loadPage( self.currentPageNumber - 1);	
 	}
-	
+	return true;	
 };
 /**
  * The Page Class.
@@ -216,7 +234,7 @@ Storificate.Page.prototype.loadTextView = function(){
 /**
  * Method of the Page Class that handles the parsing of MarkDown text.
  * @param  {string} markdownText string containing the raw MarkDown text.
- * @return {string}              The HTML version of the MarkDown text. 
+ * @return {string} html         The HTML version of the MarkDown text. 
  */
 Storificate.Page.prototype.parseMarkdown = function(markdownFile){
 
