@@ -97,11 +97,13 @@ And when you need it load your book in your JavaScript:
 > Note: Making the instance of Storificate.Book a global is of course a choice that is best made based upon the situation.
 
 Optionally you can load the book to start a certain chapter and a page:
+	
 	book = new Storificate.Book('book.json', 1, 2); //Open book at chapter 1, page 2.
 
 ## Moving between pages and chapters
 
 Finally these methods are needed to move between the pages and chapters:
+	
 	book.goToNextChapter();
 	book.goToPrevChapter();
 	book.goToNextPage();
