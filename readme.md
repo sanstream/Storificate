@@ -92,6 +92,7 @@ Include the latest version of showdown and Storificate in the head tag:
 	<script type="text/javascript" src="js/storificate.js"></script>
 
 And when you need it load your book in your JavaScript:
+	
 	book = new Storificate.Book('book.json');
 
 > Note: Making the instance of Storificate.Book a global is of course a choice that is best made based upon the situation.
