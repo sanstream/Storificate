@@ -27,7 +27,6 @@ The framework depends on a JSON data structure which defines the Chapters and al
 		"sectionType" : "Book",
 		"name": "The little red balloon"
 	},
-
 	"data":[
 			{
 				"meta":{
@@ -38,8 +37,8 @@ The framework depends on a JSON data structure which defines the Chapters and al
 					{
 						"renderLogic" : "Chapter_1\/Pages\/1\/1.js",
 						"textView":{
-							"content": 		"The text of the first page of the first chapter.",
-							"contentType": 	"text"
+							"content": 		"Chapter_1\/Pages\/1\/1.md",
+							"contentType": 	"file"
 						}		
 					},
 
@@ -55,10 +54,10 @@ The framework depends on a JSON data structure which defines the Chapters and al
 		]
 	}
 
-###Chapters
+###Chapters and Pages
 
-###Pages
-
+A book in Storificate is divided in chapters and pages (just like paper-based ones!). 
+Each entity (the book, chapters) are subdivided into a meta set and a data set. The meta servers as a discriptive section for each entity. In the meta section three sections
 A page in Storificate is simply a block of text that needs to be shown at one point. This means you could build a simple book with chapters and pages, but that just too simple right!
 
 Storificate gives you the option to do things before, during and after a page is shown. These simple options provide you with the choice to do something arround or related to the current page you are showing, as long as they can be, somehow, be defined in JavaScript.

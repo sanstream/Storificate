@@ -1,26 +1,28 @@
 {
 	"meta":{
 		"sectionType" : "Book",
-		"name": "The little red balloon"
+		"name": "The little red balloon",
+		"directory": "Chapters"
 	},
 
 	"data":[
 			{
 				"meta":{
 					"sectionType" : "Chapter",
-					"name": "Creation"
+					"name": "Creation",
+					"directory": "Chapter_1\/Pages"
 				},
 				"data":[
 					{
-						"renderLogic" : "Chapter_1\/Pages\/1\/1.js",
+						"renderLogic" : "1\/1.js",
 						"textView":{
-							"content": 		"In a factory a small empty red balloon was born.",
-							"contentType": 	"text"
+							"content": 		"1\/1.md",
+							"contentType": 	"file"
 						}		
 					},
 
 					{
-						"renderLogic" : "Chapter_1\/Pages\/2\/2.js",
+						"renderLogic" : "2\/2.js",
 						"textView":{
 							"content": 		"All it wanted was to be big and full of air. Float away and see the world.",
 							"contentType": 	"text"
@@ -28,7 +30,7 @@
 					},
 
 					{
-						"renderLogic" : "Chapter_1\/Pages\/3\/3.js",
+						"renderLogic" : "3\/3.js",
 						"textView":{
 							"content": 		"In it plastic wrapping the balloon waited and waited for someone to find him and fill him with air.",
 							"contentType": 	"text"
@@ -39,11 +41,12 @@
 			{
 				"meta":{
 					"sectionType" : "Chapter",
-					"name": "Expansion"
+					"name": "Expansion",
+					"directory": "Chapter_2\/Pages"
 				},
 				"data":[
 					{
-						"renderLogic" : "Chapter_2\/Pages\/1\/1.js",
+						"renderLogic" : "1\/1.js",
 						"textView":{
 							"content": 		"On day a boy wanted to buy a balloon.",
 							"contentType": 	"text"
@@ -51,7 +54,7 @@
 					},
 
 					{
-						"renderLogic" : "Chapter_2\/Pages\/2\/2.js",
+						"renderLogic" : "2\/2.js",
 						"textView":{
 							"content": 		"He went through all the colours and shapes and chose one. The little red balloon",
 							"contentType": 	"text"
@@ -59,7 +62,7 @@
 					},
 
 					{
-						"renderLogic" : "Chapter_2\/Pages\/3\/3.js",
+						"renderLogic" : "3\/3.js",
 						"textView":{
 							"content": 		"The boy blew in the balloon as hard as he could and the little red balloon grew bigger and bigger.",
 							"contentType": 	"text"
@@ -70,11 +73,12 @@
 						{
 				"meta":{
 					"sectionType" : "Chapter",
-					"name": "Freedom"
+					"name": "Freedom",
+					"directory": "Chapter_3\/Pages"
 				},
 				"data":[
 					{
-						"renderLogic" : "Chapter_3\/Pages\/1\/1.js",
+						"renderLogic" : "1\/1.js",
 						"textView":{
 							"content": 		"The boy managed to fill until it was three times its original size.",
 							"contentType": 	"text"
@@ -82,7 +86,7 @@
 					},
 
 					{
-						"renderLogic" : "Chapter_3\/Pages\/2\/2.js",
+						"renderLogic" : "2\/2.js",
 						"textView":{
 							"content": 		"The boy closed the balloon by tying the opening shut. A gust of wind however blew the balloon out of his hand and the little red balloon went his own way",
 							"contentType": 	"text"
@@ -90,7 +94,7 @@
 					},
 
 					{
-						"renderLogic" : "Chapter_3\/Pages\/3\/3.js",
+						"renderLogic" : "3\/3.js",
 						"textView":{
 							"content": 		"The balloon flew over houses, trees and things he had never seen before. Elation filled him as he felt something he had never felt before, freedom.",
 							"contentType": 	"text"

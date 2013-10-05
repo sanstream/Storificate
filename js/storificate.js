@@ -66,9 +66,11 @@ Storificate.Book.prototype.loadPage = function (pageNumber) {
 	var self = this;
 
 
-	console.log(' chapter:', self.currentChapterNumber, 'page:', self.currentPageNumber);
+	console.log(self.bookStructure.meta.directory +"/" + self.currentChapter.meta.directory);
 
-	self.currentPage = new Storificate.Page( self.currentChapter.data[ pageNumber - 1 ], this.textView);
+	self.currentPage = new Storificate.Page(self.currentChapter.data[ pageNumber - 1 ],
+											this.textView,
+											self.bookStructure.meta.directory +"/" + self.currentChapter.meta.directory);
 	self.currentPageNumber = pageNumber;
 };
 
@@ -119,8 +121,9 @@ Storificate.Book.prototype.goToPrevPage = function () {
 /**
  * The Page Class.
  */
-Storificate.Page = function(pageData, textView){
+Storificate.Page = function(pageData, textView, baseFilePath){
 
+	this.baseFilePath = baseFilePath;
 	this.pageData = pageData;
 	this.textView = textView;
 
@@ -168,9 +171,9 @@ Storificate.Page.prototype.loadPagelogic = function(){
 	if (document.createElement && document.getElementsByTagName) {
         
         var script_tag = document.createElement('script');
-        script_tag.setAttribute('type', 'text/javascript');
+        script_tag.setAttribute('type', 'text/javascript')
         script_tag.setAttribute('id', 'pageLogic');
-        script_tag.setAttribute('src',"Chapters/" + self.pageData.renderLogic);
+        script_tag.setAttribute('src', self.baseFilePath + "/" + self.pageData.renderLogic);
         document.getElementsByTagName('body')[0].appendChild(script_tag);
     }
 };
@@ -183,20 +186,28 @@ Storificate.Page.prototype.loadTextView = function(){
 		
 	var formattedText = null;
 
-	if(this.pageData.textView.contentType == undefined ||
-		this.pageData.textView.contentType == null ||
-		this.pageData.textView.contentType == 'file'){
+	if(this.pageData.textView !== undefined && 
+		this.pageData.textView.contentType !== undefined){
 
+		if(this.pageData.textView.contentType == 'file'){
+
+			// Only markdown texts are supported for now:
 			formattedText = this.parseMarkdown(this.pageData.textView.content);
-	}
-	else if(this.pageData.textView.contentType == 'text'){
+		}
+		else if(this.pageData.textView.contentType == 'text'){
 
-			formattedText = this.pageData.textView.content; // Since we expect only simple text with some html formatting.
+				formattedText = this.pageData.textView.content; // Since we expect only simple text with some html formatting.
+		}
+		else{
+
+			console.error("The contentType property cannot be found as part of:", this.pageData.textView);
+		}	
 	}
 	else{
 
-		console.error("The contentType property cannot be found as part of:", this.pageData.textView);
+		console.error("Some properties of this object are incorrectly set:", this.pageData);
 	}
+	
 
 	console.log(this.pageData);
 	this.textView.innerHTML = formattedText;
@@ -207,9 +218,27 @@ Storificate.Page.prototype.loadTextView = function(){
  * @param  {string} markdownText string containing the raw MarkDown text.
  * @return {string}              The HTML version of the MarkDown text. 
  */
-Storificate.Page.prototype.parseMarkdown = function(markdownText){
+Storificate.Page.prototype.parseMarkdown = function(markdownFile){
 
-		return markdownText;
+	var html = "";
+	var self = this;
+
+	Storificate.Ajax.text(
+		self.baseFilePath +  "/" + markdownFile,
+		"text/x-markdown",
+		function(responseText,error){
+
+			if(error){
+			
+				console.error(error);
+				return 0;
+			}
+			
+			var markdownConverter = new Showdown.converter();
+			html = markdownConverter.makeHtml(responseText);
+	});
+
+	return html;
 };
 
 
@@ -235,7 +264,7 @@ Storificate.Ajax = {
 		if (arguments.length < 3)     			callback = mime, mime = null; 
 		else if (mime && req.overrideMimeType)  req.overrideMimeType(mime);
 
-		req.open("GET", url, true);
+		req.open("GET", url, false); // requests are purposely not asynchronous, because in this context it is silly.
 
 		if (mime) req.setRequestHeader("Accept", mime);
 		req.onreadystatechange = function() {
