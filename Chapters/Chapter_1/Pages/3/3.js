@@ -3,6 +3,13 @@
  * @author Sanne Peters sanne@sanstream.nl
  * @description This code gets automatically initialized.
  */
+book.currentPage.beforeTextShown = function () {
+	
+};
 
-console.log('testje');
+book.currentPage.duringTextShown = function () {
+
+	$('textArea').innerHTML = book.currentPage.pageText;
+};
+
 book.currentPage.initialize();

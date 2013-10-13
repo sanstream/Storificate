@@ -1,1 +1,0 @@
-JS based markdown parser: https://code.google.com/p/pagedown/wiki/PageDown

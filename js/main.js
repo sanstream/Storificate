@@ -14,15 +14,26 @@ document.addEventListener("deviceready", function(event){
 	// Initialize the Book:
 	book = new Storificate.Book('book.json'); // book is intentionally a global, keep it this way.
 
+	if(book){
+		
+		console.log(book);		
+	}
+	
 	$('nextPage').addEvent("click", function(eventObject){
 
-		book.goToNextPage();				
-	});
+			book.goToNextPage();
 
-	$('previousPage').addEvent("click", function(eventObject){
+		});
 
-		book.goToPrevPage();				
-	});
+		$('previousPage').addEvent("click", function(eventObject){
 
-},false);
+			book.goToPrevPage();				
+		});
+
+}, false);
+
+// document.addEventListener('Storificate:bookloaded', function(eventObject){
+
+// 	console.log('custom \'Storificate:book loaded\' event was triggered, ', book, ' is loaded' );
+// }, false);
 

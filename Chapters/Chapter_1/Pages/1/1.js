@@ -3,17 +3,16 @@
  * @author Sanne Peters sanne@sanstream.nl
  */
 
-book.currentPage.beforeTextShown = function () {
 
-	
-};
+// listen to the event telling us Storificate has loaded the page:
 
-book.currentPage.duringTextShown = function () {
+	book.currentPage.beforeTextShown = function () {
+		
+	};
 
-};
+	book.currentPage.duringTextShown = function () {
 
-book.currentPage.afterTextShown = function () {
-
-};
+		$('textArea').innerHTML = book.currentPage.pageText;
+	};
 
 book.currentPage.initialize();

@@ -22,13 +22,18 @@ Storificate.Book = function (bookLocation, currentChapterNumber, currentPageNumb
 	console.log('initializing the Book.');
 	this.bookLocation = bookLocation;
 
-	this.displayArea = document.getElementById('mainDisplayArea');
-	this.textView = document.getElementById('textArea');
 	this.loadLastPage = false;
+
+	// Initialise custom Storificate Events:
+	this.bookLoaded = new Event("Storificate:bookloaded");
 
 	this.loadBook();
 };
 
+/**
+ * [loadBook description]
+ * @return {[type]} [description]
+ */
 Storificate.Book.prototype.loadBook = function(){
 
 	var self  = this;
@@ -38,8 +43,10 @@ Storificate.Book.prototype.loadBook = function(){
 		if (error) return console.error(error);
 		self.bookStructure = json;
 
-		console.log(self.bookStructure);
+		console.log(self.bookStructure, self.bookLoaded);
 		self.loadChapter();
+
+		document.dispatchEvent( self.bookLoaded );
 	});
 };
 
@@ -48,7 +55,7 @@ Storificate.Book.prototype.loadBook = function(){
 /**
  * The loadChapter method of the Book Class.
  * @return {void}
- */
+	 */
 Storificate.Book.prototype.loadChapter = function () {
 
 	var self = this;
@@ -64,13 +71,12 @@ Storificate.Book.prototype.loadChapter = function () {
 Storificate.Book.prototype.loadPage = function (pageNumber) {
 
 	var self = this;
-
-
-	console.log(self.bookStructure.meta.directory +"/" + self.currentChapter.meta.directory);
-
-	self.currentPage = new Storificate.Page(self.currentChapter.data[ pageNumber - 1 ],
-											this.textView,
-											self.bookStructure.meta.directory +"/" + self.currentChapter.meta.directory);
+	
+	self.currentPage = new Storificate.Page(
+			self.currentChapter.data[ pageNumber - 1 ],
+			self.bookStructure.meta.directory +"/" + self.currentChapter.meta.directory
+	);
+	
 	self.currentPageNumber = pageNumber;
 };
 
@@ -81,9 +87,11 @@ Storificate.Book.prototype.loadPage = function (pageNumber) {
 Storificate.Book.prototype.goToNextChapter = function () {
 
 	if(this.bookStructure.data.length == this.currentChapterNumber) return false;
+	
 	this.currentChapterNumber += 1;
 	this.currentPageNumber = 1;
 	this.loadChapter();
+	
 	return true;
 };
 
@@ -94,9 +102,11 @@ Storificate.Book.prototype.goToNextChapter = function () {
 Storificate.Book.prototype.goToPrevChapter = function () {
 
 	if (this.currentChapterNumber == 1) return false;
+	
 	this.currentChapterNumber -= 1;
 	this.loadLastPage = true; // instead of the first when loading a chapter ;) .
 	this.loadChapter();
+	
 	return true;
 };
 
@@ -115,6 +125,7 @@ Storificate.Book.prototype.goToNextPage = function () {
 		return self.goToNextChapter();
 	}
 	else self.loadPage(self.currentPageNumber);	
+	
 	return true;
 };
 
@@ -139,11 +150,12 @@ Storificate.Book.prototype.goToPrevPage = function () {
 /**
  * The Page Class.
  */
-Storificate.Page = function(pageData, textView, baseFilePath){
+Storificate.Page = function(pageData, baseFilePath){
 
 	this.baseFilePath = baseFilePath;
 	this.pageData = pageData;
-	this.textView = textView;
+
+	this.pageText = null;
 
 	this.beforeTextShown = null;
 	this.duringTextShown = null;
@@ -164,11 +176,6 @@ Storificate.Page.prototype.initialize = function () {
 	if(this.duringTextShown && typeof this.duringTextShown === 'function'){
 
 		this.duringTextShown();
-	}
-
-	if(this.afterTextShown && typeof this.afterTextShown === 'function'){
-
-		this.afterTextShown();
 	}
 };
 
@@ -201,8 +208,6 @@ Storificate.Page.prototype.loadPagelogic = function(){
  * @return {void}
  */
 Storificate.Page.prototype.loadTextView = function(){
-		
-	var formattedText = null;
 
 	if(this.pageData.textView !== undefined && 
 		this.pageData.textView.contentType !== undefined){
@@ -210,11 +215,11 @@ Storificate.Page.prototype.loadTextView = function(){
 		if(this.pageData.textView.contentType == 'file'){
 
 			// Only markdown texts are supported for now:
-			formattedText = this.parseMarkdown(this.pageData.textView.content);
+			this.pageText = this.parseMarkdown(this.pageData.textView.content);
 		}
 		else if(this.pageData.textView.contentType == 'text'){
 
-				formattedText = this.pageData.textView.content; // Since we expect only simple text with some html formatting.
+				this.pageText = this.pageData.textView.content; // Since we expect only simple text with some html formatting.
 		}
 		else{
 
@@ -225,10 +230,6 @@ Storificate.Page.prototype.loadTextView = function(){
 
 		console.error("Some properties of this object are incorrectly set:", this.pageData);
 	}
-	
-
-	console.log(this.pageData);
-	this.textView.innerHTML = formattedText;
 };
 
 /**
