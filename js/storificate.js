@@ -4,8 +4,9 @@
  * @copyright Sanstream Creations 2013
  */
 
-
+// Reserving a namespace for Storificate (safety first!).
 var Storificate = {};
+
 
 /**
  * The Book Class.
@@ -162,6 +163,8 @@ Storificate.Page = function(pageData, baseFilePath){
 	this.afterTextShown = null;
 
 	this.loadPagelogic();
+
+	this.pageTextLoaded = new Event ( "Storificate:pageTextLoaded" );
 };
 
 Storificate.Page.prototype.initialize = function () {
@@ -216,10 +219,12 @@ Storificate.Page.prototype.loadTextView = function(){
 
 			// Only markdown texts are supported for now:
 			this.pageText = this.parseMarkdown(this.pageData.textView.content);
+			document.dispatchEvent( this.pageTextLoaded )
 		}
 		else if(this.pageData.textView.contentType == 'text'){
 
-				this.pageText = this.pageData.textView.content; // Since we expect only simple text with some html formatting.
+			this.pageText = this.pageData.textView.content; // Since we expect only simple text with some html formatting.
+			document.dispatchEvent( this.pageTextLoaded );
 		}
 		else{
 

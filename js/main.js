@@ -32,8 +32,8 @@ document.addEventListener("deviceready", function(event){
 
 }, false);
 
-// document.addEventListener('Storificate:bookloaded', function(eventObject){
+document.addEventListener('Storificate:pageTextLoaded', function(eventObject){
 
-// 	console.log('custom \'Storificate:book loaded\' event was triggered, ', book, ' is loaded' );
-// }, false);
+ 	console.log('custom \'Storificate:pageTextLoaded\' event was triggered, ', book.currentPage.pageText, ' is loaded' );
+}, false);
 

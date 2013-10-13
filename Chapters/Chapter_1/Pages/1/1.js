@@ -4,15 +4,13 @@
  */
 
 
-// listen to the event telling us Storificate has loaded the page:
+book.currentPage.beforeTextShown = function () {
+	
+};
 
-	book.currentPage.beforeTextShown = function () {
-		
-	};
+book.currentPage.duringTextShown = function () {
 
-	book.currentPage.duringTextShown = function () {
-
-		$('textArea').innerHTML = book.currentPage.pageText;
-	};
+	$('textArea').innerHTML = book.currentPage.pageText;
+};
 
 book.currentPage.initialize();
